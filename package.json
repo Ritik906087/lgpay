@@ -1,0 +1,8 @@
+{
+  "name": "lg-pay-api",
+  "version": "1.0.0",
+  "dependencies": {
+    "@supabase/supabase-js": "latest"
+  }
+}
+
