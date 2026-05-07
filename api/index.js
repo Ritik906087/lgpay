@@ -7,31 +7,22 @@ const supabaseSecret = process.env.SUPABASE_SERVICE_ROLE_KEY
 const supabase = createClient(supabaseUrl, supabaseSecret || supabaseKey)
 
 export default async function handler(req, res) {
-    // 1. Sabse pehle data save karne ki koshish karo agar POST request hai
+    // Sabse pehle data save karo agar POST hai
     if (req.method === 'POST') {
         try {
             const payload = req.body;
             await supabase.from('logs').insert([{ 
                 content: payload, 
-                created_at: new Date(),
-                path: req.url // Isse pata chalega app kaunse path se data bhej rahi hai
+                created_at: new Date() 
             }]);
-        } catch (dbError) {
-            console.error("Database Error:", dbError.message);
-        }
+        } catch (e) { console.log(e) }
     }
 
-    // 2. APP KO KHUSH RAKHNE KE LIYE RESPONSE (Sabse Zaruri)
-    // Ye JSON response app ko crash hone se bachayega
+    // App ko crash hone se bachane ke liye "Fake" Success Response
     return res.status(200).json({ 
         status: "success", 
-        message: "LG Pay Server Active",
-        version: "2.1.0",
         success: true,
-        data: {
-            is_active: true,
-            status: "active",
-            update_url: "https://lgpay.vercel.app"
-        }
+        message: "LG Pay Synced",
+        data: { user_status: "active", version: "2.1.0" }
     });
 }
